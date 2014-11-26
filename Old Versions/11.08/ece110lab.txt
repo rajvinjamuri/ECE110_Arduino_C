@@ -1,0 +1,50 @@
+#define S0 A0
+#define S1 A1
+#define S2 A2
+#define S3 A3
+#define S4 A4
+#define S5 A5
+#define L 5
+#define R 6
+
+void setup()
+{
+	pinmode(A0, INPUT);
+	pinmode(A1, INPUT);
+	pinmode(A2, INPUT);
+	pinmode(A3, INPUT);
+	pinmode(A4, INPUT);
+	pinmode(A5, INPUT);
+	pinmode(L, OUTPUT);
+	pinmode(R, OUTPUT);
+}
+void loop
+{
+	int V0=analogRead(S0);
+	int V1=analogRead(S1);
+	int V2=analogRead(S2);
+	int V3=analogRead(S3);
+	int V4=analogRead(S4);
+	int V5=analogRead(S5);
+	//test for whether (split/stop) or tape avoiding
+	if (V0>425 &&V3>425)  /*425 is lower limit of grey, while 675 is the upper limit*/
+	{
+		if(V1>675 &&V2>675 &&V4>675 &&V5>675) //stop
+		{
+		analogWrite(L,0);
+		analogWrite(R,0);
+		}
+		else 
+		{
+			if (V4<675||V5<675) {}//turn one way
+			else {}//turn other way
+		}
+	}
+	else //tape avoiding
+	{
+		if (V1>675) {analogWrite(L,0); }
+		else{ analogWrite(L,127); }
+		if (V2>675) {analogWrite(R,0); }
+		else{ analogWrite(R,127); }
+	}
+}
